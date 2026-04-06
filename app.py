@@ -239,9 +239,11 @@ def delete_article(article_id):
     return redirect(url_for('dashboard'))
 
 
+# 在应用启动时创建数据库表
+with app.app_context():
+    db.create_all()
+
 if __name__ == '__main__':
-    with app.app_context():
-        db.create_all()
     # 生产环境使用环境变量指定的端口
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port, debug=False)

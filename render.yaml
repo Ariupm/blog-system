@@ -2,6 +2,7 @@ services:
   - type: web
     name: blog-system
     env: python
+    region: oregon
     buildCommand: pip install -r requirements.txt
     startCommand: gunicorn app:app
     plan: free
