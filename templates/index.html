@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card bg-primary text-white">
+            <div class="card-body py-5">
+                <h1 class="card-title">Xiaoxiao & Aman</h1>
+                {% if not current_user.is_authenticated %}
+                <a href="{{ url_for('register') }}" class="btn btn-light">开始写作</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<h2 class="mb-4">最新文章</h2>
+
+{% if articles %}
+<div class="row">
+    {% for article in articles %}
+    <div class="col-md-6 col-lg-4 mb-4">
+        <div class="card article-card h-100">
+            <div class="card-body">
+                <h5 class="card-title">{{ article.title }}</h5>
+                <h6 class="card-subtitle mb-2 text-muted small">
+                    作者: {{ article.author.username }} | {{ article.created_at.strftime('%Y-%m-%d') }}
+                </h6>
+                <p class="card-text">{{ article.content[:100] }}{% if article.content|length > 100 %}...{% endif %}</p>
+            </div>
+            <div class="card-footer bg-transparent">
+                <a href="{{ url_for('view_article', article_id=article.id) }}" class="btn btn-sm btn-primary">阅读更多</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="text-center py-5">
+    <i class="bi bi-journal-text display-1 text-muted"></i>
+    <p class="mt-3 text-muted">暂无公开文章</p>
+    {% if not current_user.is_authenticated %}
+    <a href="{{ url_for('register') }}" class="btn btn-primary mt-2">成为第一个创作者</a>
+    {% endif %}
+</div>
+{% endif %}
+{% endblock %}

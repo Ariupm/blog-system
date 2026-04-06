@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-10">
+        <div class="card">
+            <div class="card-header py-3">
+                <h5 class="card-title mb-0">编辑文章</h5>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    <div class="mb-3">
+                        <label for="title" class="form-label">文章标题</label>
+                        <input type="text" class="form-control" id="title" name="title" value="{{ article.title }}" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="content" class="form-label">文章内容</label>
+                        <textarea class="form-control" id="content" name="content" rows="12" required>{{ article.content }}</textarea>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="font_size" class="form-label">字体大小</label>
+                            <select class="form-select" id="font_size" name="font_size">
+                                <option value="small" {% if article.font_size == 'small' %}selected{% endif %}>小</option>
+                                <option value="medium" {% if article.font_size == 'medium' %}selected{% endif %}>中</option>
+                                <option value="large" {% if article.font_size == 'large' %}selected{% endif %}>大</option>
+                                <option value="x-large" {% if article.font_size == 'x-large' %}selected{% endif %}>特大</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="font_color" class="form-label">字体颜色</label>
+                            <input type="color" class="form-control form-control-color" id="font_color" name="font_color" value="{{ article.font_color }}" title="选择字体颜色">
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="is_public" name="is_public" {% if article.is_public %}checked{% endif %}>
+                            <label class="form-check-label" for="is_public">公开文章（其他人可见）</label>
+                        </div>
+                    </div>
+
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="{{ url_for('dashboard') }}" class="btn btn-secondary me-md-2">取消</a>
+                        <button type="submit" class="btn btn-primary">更新文章</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+</script>
+{% endblock %}

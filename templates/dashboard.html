@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>我的文章</h2>
+    <a href="{{ url_for('create_article') }}" class="btn btn-primary">
+        <i class="bi bi-plus-circle me-1"></i> 写新文章
+    </a>
+</div>
+
+{% if articles %}
+<div class="row">
+    {% for article in articles %}
+    <div class="col-12 mb-3">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div class="flex-grow-1">
+                        <h5 class="card-title">{{ article.title }}</h5>
+                        <p class="card-text text-muted small mb-2">
+                            {{ article.created_at.strftime('%Y年%m月%d日 %H:%M') }} |
+                            <span class="badge bg-{{ 'success' if article.is_public else 'secondary' }}">
+                                {{ '公开' if article.is_public else '私密' }}
+                            </span>
+                        </p>
+                        <p class="card-text">{{ article.content[:150] }}{% if article.content|length > 150 %}...{% endif %}</p>
+                    </div>
+                </div>
+                <div class="mt-3">
+                    <a href="{{ url_for('view_article', article_id=article.id) }}" class="btn btn-sm btn-outline-primary">查看</a>
+                    <a href="{{ url_for('edit_article', article_id=article.id) }}" class="btn btn-sm btn-outline-secondary">编辑</a>
+                    <a href="{{ url_for('delete_article', article_id=article.id) }}" class="btn btn-sm btn-outline-danger" onclick="return confirm('确定要删除这篇文章吗？')">删除</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="text-center py-5">
+    <i class="bi bi-journal-plus display-1 text-muted"></i>
+    <p class="mt-3 text-muted">你还没有写过任何文章</p>
+    <a href="{{ url_for('create_article') }}" class="btn btn-primary mt-2">开始你的第一篇创作</a>
+</div>
+{% endif %}
+{% endblock %}

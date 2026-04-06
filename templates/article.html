@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-body">
+                <article class="article-content">
+                    <h1 class="mb-3" style="font-size: {{ article.font_size }}; color: {{ article.font_color }};">{{ article.title }}</h1>
+
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <div class="text-muted">
+                            <i class="bi bi-person me-1"></i> {{ article.author.username }}
+                            <i class="bi bi-clock ms-3 me-1"></i> {{ article.created_at.strftime('%Y年%m月%d日 %H:%M') }}
+                        </div>
+                        <span class="badge bg-{{ 'success' if article.is_public else 'secondary' }}">
+                            {{ '公开' if article.is_public else '私密' }}
+                        </span>
+                    </div>
+
+                    <div class="mb-4" style="font-size: {{ article.font_size }}; color: {{ article.font_color }};">
+                        {{ article.content|replace('\n', '<br>')|safe }}
+                    </div>
+                </article>
+
+                {% if current_user.is_authenticated and current_user.id == article.user_id %}
+                <div class="border-top pt-3 mt-3">
+                    <a href="{{ url_for('edit_article', article_id=article.id) }}" class="btn btn-outline-primary btn-sm">编辑</a>
+                    <a href="{{ url_for('delete_article', article_id=article.id) }}" class="btn btn-outline-danger btn-sm" onclick="return confirm('确定要删除这篇文章吗？')">删除</a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="text-center mt-4">
+            <a href="{{ url_for('index') }}" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left me-1"></i> 返回首页
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
