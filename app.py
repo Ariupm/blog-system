@@ -3,7 +3,6 @@ from flask_login import LoginManager, UserMixin, login_user, login_required, log
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from io import BytesIO
-from PIL import Image
 import base64
 import os
 from pathlib import Path
@@ -152,16 +151,12 @@ def create_article():
             images = request.files.getlist('images')
             for image in images:
                 if image.filename:
-                    # 调整图片大小以节省空间
-                    img = Image.open(image.stream)
-                    img.thumbnail((800, 800))
-                    img_byte_arr = BytesIO()
-                    img.save(img_byte_arr, format=img.format if img.format else 'JPEG')
-                    img_byte_arr = img_byte_arr.getvalue()
+                    # 直接读取图片数据（不压缩）
+                    image_data = image.read()
 
                     new_image = ArticleImage(
                         article_id=new_article.id,
-                        image_data=img_byte_arr
+                        image_data=image_data
                     )
                     db.session.add(new_image)
 
@@ -208,16 +203,12 @@ def edit_article(article_id):
             images = request.files.getlist('images')
             for image in images:
                 if image.filename:
-                    # 调整图片大小以节省空间
-                    img = Image.open(image.stream)
-                    img.thumbnail((800, 800))
-                    img_byte_arr = BytesIO()
-                    img.save(img_byte_arr, format=img.format if img.format else 'JPEG')
-                    img_byte_arr = img_byte_arr.getvalue()
+                    # 直接读取图片数据（不压缩）
+                    image_data = image.read()
 
                     new_image = ArticleImage(
                         article_id=article.id,
-                        image_data=img_byte_arr
+                        image_data=image_data
                     )
                     db.session.add(new_image)
 
